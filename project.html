@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Case Study: CI/CD Pipeline to AWS EKS | Noah Vastola</title>
+<meta name="description" content="Case study: building an end-to-end Jenkins pipeline that compiles a Java application, publishes images to AWS ECR, and deploys to an EKS cluster through dynamically templated Kubernetes manifests."/>
+<meta name="author" content="Noah Vastola"/>
+
+<meta property="og:type" content="article"/>
+<meta property="og:site_name" content="Noah Vastola"/>
+<meta property="og:url" content="https://nvastola.com/project.html"/>
+<meta property="og:title" content="Case Study: CI/CD Pipeline to AWS EKS"/>
+<meta property="og:description" content="Five build failures, one networking constraint nobody warns you about, and a pipeline that finally deployed itself."/>
+<meta name="twitter:card" content="summary"/>
+
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+
+<link rel="icon" href="assets/img/favicon.ico" sizes="any"/>
+<link rel="stylesheet" href="styles.css"/>
+
+<style>
+  /* ---- Case study layout ---- */
+  .cs-hero { padding-top: 140px; padding-bottom: 3rem; text-align: center; }
+  .cs-title { font-size: clamp(2rem, 4.5vw, 3.25rem); font-weight: 800; line-height: 1.15; letter-spacing: -0.03em; color: var(--fg); margin-bottom: 1.25rem; }
+  .cs-lede { color: var(--muted-fg); font-size: 1.1rem; line-height: 1.7; max-width: 46rem; margin: 0 auto 2rem; }
+  .cs-tags { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem; }
+  .cs-tag { font-family: var(--mono-font); font-size: 0.7rem; font-weight: 500; padding: 0.25rem 0.6rem; border-radius: 4px; background: var(--muted); color: var(--muted-fg); border: 1px solid var(--border); text-transform: uppercase; letter-spacing: 0.05em; }
+
+  .cs-wrap { max-width: 860px; margin: 0 auto; padding: 0 2rem 5rem; }
+
+  /* At-a-glance facts, so a recruiter gets the shape of it in ten seconds */
+  .cs-facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; margin-bottom: 3rem; }
+  .cs-fact { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 1.25rem; }
+  .cs-fact-label { font-family: var(--mono-font); font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted-fg); margin-bottom: 0.5rem; }
+  .cs-fact-value { font-size: 0.95rem; font-weight: 700; color: var(--fg); line-height: 1.4; }
+
+  .cs-block { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 2.5rem 3rem; margin-bottom: 1.5rem; text-align: left; }
+  @media(max-width: 768px) { .cs-block { padding: 1.75rem 1.5rem; } }
+  .cs-h2 { font-size: 1.4rem; font-weight: 700; color: var(--fg); letter-spacing: -0.02em; margin-bottom: 1.25rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border); }
+  .cs-h2 i { color: var(--primary); margin-right: 0.6rem; font-size: 1.1rem; }
+  .cs-block p { color: var(--muted-fg); line-height: 1.8; margin-bottom: 1.25rem; font-size: 1rem; }
+  .cs-block p:last-child { margin-bottom: 0; }
+  .cs-block strong { color: var(--fg); font-weight: 600; }
+  .cs-block code { font-family: var(--mono-font); font-size: 0.85em; background: var(--muted); color: var(--primary); padding: 0.15rem 0.4rem; border-radius: 4px; border: 1px solid var(--border); }
+  .cs-block a.inline { color: var(--primary); text-decoration: underline; text-underline-offset: 3px; }
+
+  /* Pipeline stage rail */
+  .cs-stages { counter-reset: stage; margin: 0; padding: 0; }
+  .cs-stage { position: relative; padding: 0 0 1.75rem 3.25rem; }
+  .cs-stage:last-child { padding-bottom: 0; }
+  .cs-stage::before { counter-increment: stage; content: counter(stage); position: absolute; left: 0; top: 0; width: 2rem; height: 2rem; border-radius: 6px; background: var(--card); border: 1px solid var(--border); color: var(--primary); font-family: var(--mono-font); font-size: 0.8rem; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+  .cs-stage::after { content: ''; position: absolute; left: 1rem; top: 2.25rem; bottom: 0.25rem; width: 1px; background: var(--border); }
+  .cs-stage:last-child::after { display: none; }
+  .cs-stage-name { font-size: 0.95rem; font-weight: 700; color: var(--fg); margin-bottom: 0.35rem; padding-top: 0.3rem; }
+  .cs-stage-desc { font-size: 0.9rem; color: var(--muted-fg); line-height: 1.7; }
+
+  /* Problem / resolution pairs */
+  .cs-problem { border-left: 3px solid var(--border); padding-left: 1.25rem; margin-bottom: 1.75rem; }
+  .cs-problem:last-child { margin-bottom: 0; }
+  .cs-problem-t { font-family: var(--mono-font); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #f59e0b; margin-bottom: 0.5rem; }
+  .cs-problem p { margin-bottom: 0.6rem; font-size: 0.925rem; }
+  .cs-problem p:last-child { margin-bottom: 0; }
+  .cs-problem .fix { color: var(--fg); }
+
+  .cs-list { padding-left: 1.4rem; margin: 0; }
+  .cs-list li { color: var(--muted-fg); line-height: 1.8; margin-bottom: 0.75rem; list-style: square; font-size: 0.975rem; }
+  .cs-list li:last-child { margin-bottom: 0; }
+  .cs-list li::marker { color: var(--border); }
+  .cs-list strong { color: var(--fg); }
+
+  .cs-shot { margin: 1.5rem 0 0; border-radius: 6px; overflow: hidden; border: 1px solid var(--border); }
+  .cs-shot img { width: 100%; display: block; }
+  .cs-shot .cap { background: var(--muted); padding: 0.75rem 1rem; font-size: 0.82rem; color: var(--muted-fg); font-style: italic; border-top: 1px solid var(--border); }
+
+  .cs-cta { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; margin-top: 2.5rem; }
+</style>
+
+<script>
+(function(){
+  var s = localStorage.getItem('nv-theme') || 'dark';
+  if(s === 'dark') document.documentElement.classList.add('dark');
+  else document.documentElement.classList.remove('dark');
+})();
+</script>
+</head>
+<body>
+
+<div class="cursor-dot" id="cursorDot"></div>
+
+<nav id="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="nav-avatar">NV</div>
+      <span>Noah Vastola</span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html#about" class="nav-link"><i class="fa-solid fa-user"></i> About</a>
+      <a href="index.html#skills" class="nav-link"><i class="fa-solid fa-code"></i> Skills</a>
+      <a href="index.html#experience" class="nav-link"><i class="fa-solid fa-briefcase"></i> Experience</a>
+      <a href="index.html#projects" class="nav-link active"><i class="fa-solid fa-diagram-project"></i> Projects</a>
+      <a href="resume.html" class="nav-link"><i class="fa-solid fa-file-lines"></i> Resume</a>
+      <a href="blog.html" class="nav-link"><i class="fa-solid fa-pen-nib"></i> Blogs</a>
+    </div>
+    <div class="nav-right">
+      <button class="theme-btn" id="themeBtn" title="Toggle theme"><i class="fa-solid fa-moon" id="themeIcon"></i></button>
+      <a href="index.html#contact" class="contact-btn" title="Contact me"><i class="fa-solid fa-envelope"></i></a>
+      <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+
+<div class="mob-menu" id="mobMenu">
+  <a href="index.html#about" class="mob-link"><i class="fa-solid fa-user"></i> About</a>
+  <a href="index.html#skills" class="mob-link"><i class="fa-solid fa-code"></i> Skills</a>
+  <a href="index.html#experience" class="mob-link"><i class="fa-solid fa-briefcase"></i> Experience</a>
+  <a href="index.html#projects" class="mob-link"><i class="fa-solid fa-diagram-project"></i> Projects</a>
+  <a href="resume.html" class="mob-link"><i class="fa-solid fa-file-lines"></i> Resume</a>
+  <a href="blog.html" class="mob-link"><i class="fa-solid fa-pen-nib"></i> Blogs</a>
+  <div class="mob-actions">
+    <button class="theme-btn" id="themeBtnMob"><i class="fa-solid fa-moon" id="themeIconMob"></i></button>
+    <a href="index.html#contact" class="contact-btn"><i class="fa-solid fa-envelope"></i></a>
+  </div>
+</div>
+
+<section class="cs-hero grid-bg">
+  <div class="container">
+    <div class="reveal">
+      <div class="hero-role-box" style="margin-bottom: 1.5rem;">
+        <div class="hero-role"><i class="fa-solid fa-diagram-project"></i> Featured Case Study</div>
+      </div>
+    </div>
+    <div class="reveal" style="transition-delay: 0.1s;">
+      <h1 class="cs-title">A CI/CD pipeline that deploys itself to Kubernetes</h1>
+    </div>
+    <p class="cs-lede reveal" style="transition-delay: 0.2s;">
+      Jenkins compiles a Java application, publishes the image to AWS ECR, and rolls it onto an EKS cluster
+      through manifests templated at build time &mdash; with no hand-edited YAML and no manually tagged images anywhere in the loop.
+    </p>
+    <div class="cs-tags reveal" style="transition-delay: 0.3s;">
+      <span class="cs-tag">Jenkins</span><span class="cs-tag">Kubernetes</span><span class="cs-tag">AWS EKS</span>
+      <span class="cs-tag">AWS ECR</span><span class="cs-tag">Docker</span><span class="cs-tag">Java</span>
+      <span class="cs-tag">Maven</span><span class="cs-tag">Groovy</span><span class="cs-tag">Linux</span>
+    </div>
+  </div>
+</section>
+
+<div class="cs-wrap">
+
+  <div class="cs-facts reveal">
+    <div class="cs-fact">
+      <div class="cs-fact-label">Role</div>
+      <div class="cs-fact-value">Sole builder</div>
+    </div>
+    <div class="cs-fact">
+      <div class="cs-fact-label">Pipeline stages</div>
+      <div class="cs-fact-value">5, fully automated</div>
+    </div>
+    <div class="cs-fact">
+      <div class="cs-fact-label">Builds to green</div>
+      <div class="cs-fact-value">6</div>
+    </div>
+    <div class="cs-fact">
+      <div class="cs-fact-label">Registries</div>
+      <div class="cs-fact-value">Docker Hub &rarr; AWS ECR</div>
+    </div>
+  </div>
+
+  <section class="cs-block reveal">
+    <h2 class="cs-h2"><i class="fa-solid fa-circle-question"></i>The problem</h2>
+    <p>
+      I had a Jenkins pipeline that could build a Java application and push a Docker image. What it could not do was
+      <strong>deploy</strong>. The final stage was an empty block, and every release still ended with somebody opening a
+      terminal, editing an image tag into a Kubernetes manifest by hand, and running <code>kubectl apply</code>.
+    </p>
+    <p>
+      That last manual step is where the real risk lives. A hand-typed tag can point at an image that was never built by that
+      pipeline run. A version bump can get committed for a build that failed. The goal here was to close the loop: one trigger,
+      one artifact, one deployment, and no human editing YAML in between.
+    </p>
+  </section>
+
+  <section class="cs-block reveal">
+    <h2 class="cs-h2"><i class="fa-solid fa-layer-group"></i>How the pipeline works</h2>
+    <p>The ordering is the design. Each stage is a checkpoint that makes the next one safe to run.</p>
+    <div class="cs-stages">
+      <div class="cs-stage">
+        <div class="cs-stage-name">Increment version</div>
+        <div class="cs-stage-desc">Reads the current version from <code>pom.xml</code>, bumps it with the Maven Build Helper plugin, and exports an <code>IMAGE_NAME</code> that combines the version with the Jenkins build number (for example <code>1.1.12-6</code>). Every later stage references that one variable.</div>
+      </div>
+      <div class="cs-stage">
+        <div class="cs-stage-name">Build app</div>
+        <div class="cs-stage-desc"><code>mvn clean package</code> compiles the Java source into a jar. The Dockerfile expects that jar to exist &mdash; if this stage is skipped, the image build fails outright rather than shipping something stale.</div>
+      </div>
+      <div class="cs-stage">
+        <div class="cs-stage-name">Build &amp; push image</div>
+        <div class="cs-stage-desc">Builds the Docker image tagged with <code>$IMAGE_NAME</code>, authenticates against the registry, and pushes. The image now exists where the cluster can pull it.</div>
+      </div>
+      <div class="cs-stage">
+        <div class="cs-stage-name">Deploy to EKS</div>
+        <div class="cs-stage-desc">Authenticates to EKS with AWS credentials, runs <code>envsubst</code> to substitute <code>$IMAGE_NAME</code> and <code>$APP_NAME</code> into the Kubernetes manifests, and applies them. This is the stage that used to be empty.</div>
+      </div>
+      <div class="cs-stage">
+        <div class="cs-stage-name">Commit version update</div>
+        <div class="cs-stage-desc">Pushes the updated <code>pom.xml</code> back to GitLab so the next run starts from the incremented version. It runs <em>last</em> on purpose: a failed deploy must never leave a committed version bump behind it.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cs-block reveal">
+    <h2 class="cs-h2"><i class="fa-solid fa-scale-balanced"></i>The decision that mattered: templating the manifests</h2>
+    <p>
+      Kubernetes manifests are static YAML, but the image tag changes on every single run. There were three reasonable ways to
+      inject it &mdash; Helm charts, the Kubernetes Jenkins plugin, or <code>envsubst</code> shelling out over a template file.
+    </p>
+    <p>
+      I chose <strong><code>envsubst</code></strong>. Helm brings a release lifecycle, a chart repository, and templating syntax
+      I did not need for one variable in one deployment. The plugin hides the substitution behind Jenkins-specific configuration
+      that would not survive a move off Jenkins. <code>envsubst</code> is a two-line shell step, it leaves the manifest readable as
+      ordinary YAML, and the same command runs identically on my laptop and on the build agent. When the project grows past a
+      handful of substitutions, Helm becomes the right answer &mdash; but adopting it on day one would have been complexity
+      bought on credit.
+    </p>
+  </section>
+
+  <section class="cs-block reveal">
+    <h2 class="cs-h2"><i class="fa-solid fa-triangle-exclamation"></i>What actually broke</h2>
+    <p>
+      The pipeline logic was never the hard part. Five consecutive builds failed, and every one of them failed on a
+      <strong>prerequisite</strong> rather than on the thing I had just written.
+    </p>
+
+    <div class="cs-problem">
+      <div class="cs-problem-t">Builds 1&ndash;3 &mdash; Docker unreachable from the agent</div>
+      <p>The agent could not find Docker, then could not reach the Docker socket, then could reach it but was denied permission.</p>
+      <p class="fix"><strong>Resolved by</strong> installing the client, mounting the host socket into the agent, and &mdash; the one that took longest &mdash; matching the agent user to the socket's group <em>by numeric GID</em>. Linux permissions compare numbers, not group names, so a group that looks correct by name can still be the wrong group.</p>
+    </div>
+
+    <div class="cs-problem">
+      <div class="cs-problem-t">Builds 4&ndash;5 &mdash; Git identity and repository access</div>
+      <p>The version-bump commit failed with no configured Git identity, then failed again on a push the credentials were not scoped to allow.</p>
+      <p class="fix"><strong>Resolved by</strong> setting the committer identity inside the pipeline and issuing a credential with write access to the repository, stored in Jenkins rather than in the Jenkinsfile.</p>
+    </div>
+
+    <div class="cs-problem">
+      <div class="cs-problem-t">Pods stuck in <code>Pending</code> &mdash; and it was not the deployment</div>
+      <p>With the pipeline finally green, the pods would not schedule. Nothing in the manifest was wrong.</p>
+      <p class="fix"><strong>The cause was the node.</strong> On EKS, the maximum number of pods per node is bound to the instance type, because each pod consumes an ENI-backed IP address. The cluster had run out of addressable slots, not CPU or memory. That is a networking constraint, and it is worth knowing <em>before</em> you provision a node group rather than after.</p>
+    </div>
+  </section>
+
+  <section class="cs-block reveal">
+    <h2 class="cs-h2"><i class="fa-solid fa-cloud-arrow-up"></i>Moving the registry to AWS ECR</h2>
+    <p>
+      Once the loop worked against Docker Hub, I swapped the registry for <strong>AWS ECR</strong> to keep the images inside the
+      same account and IAM boundary as the cluster. That meant creating the repository, issuing Jenkins credentials scoped to it,
+      rewriting the push stage for the ECR registry URL, and creating a pull secret so the cluster itself could authenticate.
+    </p>
+    <p>
+      Registry migration is a good test of whether a pipeline is actually parameterised or just appears to be. This one changed in
+      one stage and one secret.
+    </p>
+    <div class="cs-shot">
+      <img src="assets/img/ecr-repo.png" alt="The AWS ECR repository listing the java-maven-app image tagged with a pipeline-generated version"/>
+      <div class="cap">The <code>java-maven-app</code> image in ECR, tagged with the version generated during that pipeline run &mdash; not by a person.</div>
+    </div>
+  </section>
+
+  <section class="cs-block reveal">
+    <h2 class="cs-h2"><i class="fa-solid fa-circle-check"></i>Outcome</h2>
+    <ul class="cs-list">
+      <li><strong>Deployment is fully automated end to end.</strong> A commit produces a versioned artifact, a tagged image in ECR, and a running workload on EKS with no manual step in between.</li>
+      <li><strong>Every deployed image traces back to the run that built it.</strong> The tag is generated in stage one and carried through; nothing can be deployed that the pipeline did not produce.</li>
+      <li><strong>Failed builds leave no residue.</strong> Because the version commit runs last, a broken deploy does not advance the version in source control.</li>
+      <li><strong>The manifests stayed readable.</strong> They are still plain YAML that someone unfamiliar with the project can open and understand.</li>
+    </ul>
+  </section>
+
+  <section class="cs-block reveal">
+    <h2 class="cs-h2"><i class="fa-solid fa-lightbulb"></i>What I took from it</h2>
+    <ul class="cs-list">
+      <li><strong>Pipelines break on prerequisites, not logic.</strong> Every failure here was environment &mdash; a missing binary, a socket, a permission, a credential scope. Reading the actual error text, rather than assuming the last thing I wrote was at fault, was the skill that mattered.</li>
+      <li><strong>Choose the smallest tool that closes the requirement.</strong> Helm is not wrong; it was just larger than the problem. I would reach for it the moment the substitution count or the release lifecycle justified it.</li>
+      <li><strong>Infrastructure limits are often not the limit you assume.</strong> Pods pending looked like a resource problem and was an IP addressing problem. Knowing which layer you are actually constrained by is most of the diagnosis.</li>
+    </ul>
+  </section>
+
+  <div class="cs-cta reveal">
+    <a href="blog/devops-project-7.html" class="btn-primary" style="text-decoration:none;">
+      <i class="fa-solid fa-book-open"></i> Read the full build log
+    </a>
+    <a href="https://gitlab.com/nvastola/java-maven-app-eks/-/blob/jenkins-jobs/README.md" target="_blank" rel="noopener" class="btn-outline">
+      <i class="fa-brands fa-gitlab"></i> View the repository
+    </a>
+    <a href="projects/projects.html" class="btn-outline">
+      <i class="fa-solid fa-diagram-project"></i> All projects
+    </a>
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-line"></div>
+  <div class="footer-grid">
+    <div class="footer-col">
+      <div class="f-brand-name">Noah Vastola</div>
+      <p>Systems administrator focused on enterprise endpoint management, identity, and infrastructure automation.</p>
+    </div>
+    <div class="footer-col">
+      <div class="f-col-title">Quick Links</div>
+      <ul>
+        <li><a href="index.html#about">About</a></li>
+        <li><a href="index.html#skills">Skills</a></li>
+        <li><a href="projects/projects.html">Projects</a></li>
+        <li><a href="resume.html">Resume</a></li>
+        <li><a href="project.html">Case Study</a></li>
+        <li><a href="blog.html">Blogs</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <div class="f-col-title">Credentials</div>
+      <ul>
+        <li><a href="index.html#certifications">CompTIA Security+</a></li>
+        <li><a href="index.html#certifications">CompTIA Network+</a></li>
+        <li><a href="index.html#certifications">AWS Cloud Practitioner</a></li>
+        <li><a href="index.html#certifications">B.S. ISA &ndash; LSU</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <div class="f-col-title">Connect</div>
+      <div class="f-socials">
+        <a href="https://gitlab.com/nvastola" target="_blank" rel="noopener" class="f-social" title="GitLab"><i class="fa-brands fa-gitlab"></i></a>
+        <a href="https://www.linkedin.com/in/noahvastola/" target="_blank" rel="noopener" class="f-social" title="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
+        <a href="mailto:noahvastola@gmail.com" class="f-social" title="Email"><i class="fa-solid fa-envelope"></i></a>
+        <a href="assets/doc/Resume.pdf" target="_blank" rel="noopener" class="f-social" title="Resume PDF"><i class="fa-solid fa-file-pdf"></i></a>
+      </div>
+      <p class="f-keywords">Keywords: CI/CD, Jenkins, Kubernetes, AWS EKS, AWS ECR, Docker, envsubst, Infrastructure Automation</p>
+    </div>
+  </div>
+</footer>
+
+<script src="js/scripts.js"></script>
+</body>
+</html>
