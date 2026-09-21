@@ -203,7 +203,7 @@ section { position: relative; overflow: hidden; padding: 6rem 0; }
 .filter-bar { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem; margin-bottom: 3rem; }
 .f-btn { padding: 0.4rem 1rem; border-radius: 999px; font-family: var(--mono-font); font-size: 0.75rem; font-weight: 500; text-transform: uppercase; border: 1px solid var(--border); background: var(--bg); color: var(--muted-fg); transition: all 0.2s; }
 .f-btn:hover, .f-btn.on { border-color: var(--fg); color: var(--fg); }
-.proj-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 1.5rem; }
+.proj-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(340px, 100%), 1fr)); gap: 1.5rem; }
 .proj-card { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; transition: transform 0.2s, border-color 0.2s; }
 .proj-card:hover { border-color: var(--primary); transform: translateY(-4px); box-shadow: 0 12px 24px rgba(0,0,0,0.05); }
 .proj-card.off { display: none; }
@@ -219,7 +219,7 @@ section { position: relative; overflow: hidden; padding: 6rem 0; }
 .proj-link:hover { color: var(--primary); }
 
 /* Blogs Section */
-.blog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem; }
+.blog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(320px, 100%), 1fr)); gap: 1.5rem; }
 .blog-card { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; text-decoration: none; display: flex; flex-direction: column; transition: all 0.2s; }
 .blog-card:hover { border-color: var(--fg); transform: translateY(-4px); }
 .blog-thumb { height: 120px; font-size: 2.5rem; display: flex; align-items: center; justify-content: center; background: var(--card); border-bottom: 1px solid var(--border); color: var(--fg); }
@@ -232,7 +232,7 @@ section { position: relative; overflow: hidden; padding: 6rem 0; }
 .blog-card:hover .blog-cta { color: var(--primary); }
 
 /* Certifications */
-.certs-grid { display: grid; gap: 1.5rem; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); max-width: 1000px; margin: 0 auto; }
+.certs-grid { display: grid; gap: 1.5rem; grid-template-columns: repeat(auto-fill, minmax(min(220px, 100%), 1fr)); max-width: 1000px; margin: 0 auto; }
 .cert-card { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; text-align: center; transition: all 0.2s; display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden; }
 .cert-card:hover { border-color: var(--primary); }
 .cert-img { font-size: 2.5rem; margin-bottom: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; align-items: center; }
@@ -266,7 +266,7 @@ footer { position: relative; padding: 4rem 2rem 2rem; margin-top: 2rem; backgrou
 .footer-line { display: none; }
 .footer-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr; gap: 3rem; margin-bottom: 3rem; }
 @media(min-width:768px){.footer-grid{grid-template-columns: 2fr 1fr 1fr 1fr;}}
-.footer-col h1 { font-size: 1.25rem; font-weight: 800; margin-bottom: 1rem; letter-spacing: -0.02em; }
+.footer-col .f-brand-name { font-size: 1.25rem; font-weight: 800; margin-bottom: 1rem; letter-spacing: -0.02em; }
 .footer-col p { font-size: 0.875rem; color: var(--muted-fg); line-height: 1.6; max-width: 300px; }
 .f-col-title { font-family: var(--mono-font); font-size: 0.75rem; font-weight: 600; color: var(--fg); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1.5rem; }
 .footer-col ul li a { font-size: 0.875rem; color: var(--muted-fg); display: block; padding: 0.3rem 0; transition: color 0.2s; }
@@ -309,4 +309,43 @@ footer { position: relative; padding: 4rem 2rem 2rem; margin-top: 2rem; backgrou
 /* Invert the Lottie animation to white in dark mode */
 .dark .hero-visual dotlottie-wc {
   filter: invert(1);
+}
+/* Nav fits six links between the 1024px breakpoint and the 1200px container */
+@media(min-width:1025px) and (max-width:1200px){
+  .nav-links { gap: 1rem; }
+  .nav-link { font-size: 0.82rem; }
+  .nav-inner { padding: 1rem 1.25rem; }
+}
+
+/* Marks the page you are currently on in the nav */
+.nav-link.active { color: var(--fg); font-weight: 600; }
+.nav-link.active i { color: var(--primary); }
+
+/* Keyboard focus is visible everywhere, not just on hover */
+a:focus-visible, button:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Honor a reduced-motion preference: reveal content immediately, drop the cursor ring */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+  .cursor-dot, .scroll-dot { display: none; }
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+
+/* The custom cursor ring stays hidden until the pointer has actually moved,
+   so it never appears parked in the top-left corner on load. */
+.cursor-dot { opacity: 0; transition: left 0.1s ease-out, top 0.1s ease-out, opacity 0.2s ease; }
+.cursor-dot.on { opacity: 1; }
+@media (hover: none), (pointer: coarse) { .cursor-dot { display: none; } }
+
+/* Narrow phones: tighten the gutter so card grids keep a real margin either side */
+@media(max-width:420px){
+  .container { padding: 0 1.25rem; }
+  .hero-content { padding: 0 1.25rem; }
+  .cs-wrap, .resume-doc { padding-left: 1.25rem; padding-right: 1.25rem; }
+  .tl-wrap { padding-left: 1.5rem; padding-right: 0.5rem; }
 }
