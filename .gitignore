@@ -1,0 +1,10 @@
+# Course handouts — kept locally for reference, not part of the site
+vibe-coding-activity.pdf
+vibe-coding-rubric.pdf
+
+# OS / editor junk
+.DS_Store
+Thumbs.db
+*.swp
+.vscode/
+.idea/
