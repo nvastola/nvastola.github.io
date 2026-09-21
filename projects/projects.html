@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>All Projects | Noah Vastola – Systems &amp; Infrastructure Engineering</title>
+<meta name="description" content="Complete portfolio of infrastructure, automation, and systems projects by Noah Vastola."/>
+
+<meta property="og:type" content="website"/>
+<meta property="og:site_name" content="Noah Vastola"/>
+<meta property="og:url" content="https://nvastola.com/projects/projects.html"/>
+<meta property="og:title" content="All Projects | Noah Vastola – Systems &amp; Infrastructure Engineering"/>
+<meta property="og:description" content="Complete portfolio of infrastructure, automation, and systems projects by Noah Vastola."/>
+<meta name="twitter:card" content="summary"/>
+
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+
+<link rel="stylesheet" href="../css/styles.css"/>
+
+<style>
+  /* Multi-icon thumbnail layout */
+  .thumb-icons { display: flex; align-items: center; justify-content: center; gap: 1rem; }
+  .thumb-icons img { width: 36px; height: 36px; object-fit: contain; transition: transform 0.2s ease; }
+  .proj-card:hover .thumb-icons img { transform: scale(1.1); }
+
+  /* Top card meta details */
+  .card-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 0.5rem; margin-bottom: 0.75rem; }
+  .card-topic-pill { font-family: var(--mono-font); font-size: 0.7rem; font-weight: 600; padding: 0.25rem 0.5rem; border-radius: 4px; background: var(--muted); color: var(--fg); border: 1px solid var(--border); text-transform: uppercase; letter-spacing: 0.05em; }
+
+  /* Tag images */
+  .proj-tag img { width: 14px; height: 14px; object-fit: contain; flex-shrink: 0; }
+  .proj-tag { display: inline-flex; align-items: center; gap: 0.4rem; }
+
+  /* Filtering layout */
+  .filter-section { max-width: 1200px; margin: 0 auto; padding: 0 0rem 0rem; position: relative; z-index: 10; text-align: center; }
+  .filter-label { font-family: var(--mono-font); font-size: 0.75rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted-fg); margin-bottom: 1rem; }
+  .f-btn .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; opacity: 0.7; }
+</style>
+
+<script>
+(function(){
+  var s = localStorage.getItem('nv-theme') || 'dark';
+  if(s === 'dark') document.documentElement.classList.add('dark');
+  else document.documentElement.classList.remove('dark');
+})();
+</script>
+</head>
+<body>
+
+<div class="cursor-dot" id="cursorDot"></div>
+
+<nav id="navbar">
+  <div class="nav-inner">
+    <a href="../index.html" class="nav-logo">
+      <div class="nav-avatar">NV</div>
+      <span>Noah Vastola</span>
+    </a>
+    <div class="nav-links">
+      <a href="../index.html#about" class="nav-link"><i class="fa-solid fa-user"></i> About</a>
+      <a href="../index.html#skills" class="nav-link"><i class="fa-solid fa-code"></i> Skills</a>
+      <a href="../index.html#experience" class="nav-link"><i class="fa-solid fa-briefcase"></i> Experience</a>
+      <a href="../index.html#projects" class="nav-link active"><i class="fa-solid fa-diagram-project"></i> Projects</a>
+      <a href="../index.html#blogs" class="nav-link"><i class="fa-solid fa-pen-nib"></i> Blogs</a>
+    </div>
+    <div class="nav-right">
+      <button class="theme-btn" id="themeBtn" title="Toggle theme"><i class="fa-solid fa-moon" id="themeIcon"></i></button>
+      <a href="../index.html#contact" class="contact-btn" title="Contact me"><i class="fa-solid fa-envelope"></i></a>
+      <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+
+<div class="mob-menu" id="mobMenu">
+  <a href="../index.html#about" class="mob-link"><i class="fa-solid fa-user"></i> About</a>
+  <a href="../index.html#skills" class="mob-link"><i class="fa-solid fa-code"></i> Skills</a>
+  <a href="../index.html#experience" class="mob-link"><i class="fa-solid fa-briefcase"></i> Experience</a>
+  <a href="../index.html#projects" class="mob-link"><i class="fa-solid fa-diagram-project"></i> Projects</a>
+  <a href="../index.html#blogs" class="mob-link"><i class="fa-solid fa-pen-nib"></i> Blogs</a>
+  <div class="mob-actions">
+    <button class="theme-btn" id="themeBtnMob"><i class="fa-solid fa-moon" id="themeIconMob"></i></button>
+    <a href="../index.html#contact" class="contact-btn"><i class="fa-solid fa-envelope"></i></a>
+  </div>
+</div>
+
+<section id="page-hero" class="grid-bg" style="padding-top: 140px; padding-bottom: 2rem;">
+  <div class="container" style="text-align:center">
+    <div class="reveal">
+      <div class="hero-role-box" style="margin-bottom: 1.5rem;">
+        <div class="hero-role"><i class="fa-solid fa-diagram-project"></i> Full Portfolio</div>
+      </div>
+    </div>
+    <div class="reveal" style="transition-delay: 0.1s;">
+      <h1 class="sec-title">All Projects</h1>
+    </div>
+    <p class="sec-sub reveal" style="transition-delay: 0.2s;">Hands-on projects documenting real deployments, real errors, and real fixes &mdash; because that&rsquo;s where the learning actually happens.</p>
+  </div>
+</section>
+
+<section style="padding: 0;">
+  <div class="filter-section reveal" style="transition-delay: 0.3s;">
+    <div class="filter-label"><i class="fa-solid fa-filter" style="margin-right:.4rem"></i>Filter by topic</div>
+    <div class="filter-bar" style="justify-content: center; flex-wrap: wrap;">
+      <button class="f-btn on" data-f="all">All Projects</button>
+      <button class="f-btn" data-f="linux"><span class="dot"></span> Linux &amp; Servers</button>
+      <button class="f-btn" data-f="containers"><span class="dot"></span> Containers</button>
+      <button class="f-btn" data-f="cicd"><span class="dot"></span> CI/CD with Jenkins</button>
+      <button class="f-btn" data-f="kubernetes"><span class="dot"></span> Kubernetes</button>
+      <button class="f-btn" data-f="iac"><span class="dot"></span> Infrastructure as Code</button>
+      <button class="f-btn" data-f="automation"><span class="dot"></span> Python &amp; Automation</button>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top: 0rem;">
+  <div class="container" style="max-width: 1200px;">
+    <div class="proj-grid" id="projGrid">
+
+      <div class="proj-card reveal" data-topic="iac">
+        <div class="proj-thumb">
+          <div class="thumb-icons">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/azure/azure-original.svg" alt="Azure" loading="lazy">
+            <img src="https://cdn.simpleicons.org/terraform/7B42BC" alt="Terraform" loading="lazy">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/githubactions/githubactions-original.svg" alt="GitHub Actions" loading="lazy">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/powershell/powershell-original.svg" alt="PowerShell" loading="lazy">
+          </div>
+        </div>
+        <div class="proj-body">
+          <div class="card-top">
+            <span class="card-topic-pill"><i class="fa-solid fa-layer-group"></i> IaC</span>
+          </div>
+          <div class="proj-name">Cloud-Native Resume Website on Azure</div>
+          <div class="proj-desc">Serverless resume site on Azure with a Terraform-provisioned backend, CosmosDB visitor counter via Azure Functions, and automated deploys through GitHub Actions.</div>
+          <div class="proj-tag-row">
+            <span class="proj-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/azure/azure-original.svg" alt="">Azure</span>
+            <span class="proj-tag"><img src="https://cdn.simpleicons.org/terraform/7B42BC" alt="">Terraform</span>
+            <span class="proj-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/githubactions/githubactions-original.svg" alt="">GitHub Actions</span>
+            <span class="proj-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/powershell/powershell-original.svg" alt="">PowerShell</span>
+          </div>
+          <div class="proj-links">
+            <span class="proj-link" style="color:var(--primary);border-color:var(--primary);cursor:default"><i class="fa-solid fa-check"></i> This Site</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="proj-card reveal" data-topic="linux">
+        <div class="proj-thumb">
+          <div class="thumb-icons">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/linux/linux-original.svg" alt="Linux" loading="lazy">
+            <img src="https://cdn.simpleicons.org/digitalocean/0080FF" alt="DigitalOcean" loading="lazy">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/java/java-original.svg" alt="Java" loading="lazy">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/gradle/gradle-original.svg" alt="Gradle" loading="lazy">
+          </div>
+        </div>
+        <div class="proj-body">
+          <div class="card-top">
+            <span class="card-topic-pill"><i class="fa-solid fa-server"></i> Linux &amp; Servers</span>
+          </div>
+          <div class="proj-name">Deploy Java Application to Production Linux Server</div>
+          <div class="proj-desc">Provisioned and secured a DigitalOcean droplet to serve a Java Gradle app — implemented SSH key auth, cloud firewall rules, and a dedicated non-root application user.</div>
+          <div class="proj-tag-row">
+            <span class="proj-tag"><img src="https://cdn.simpleicons.org/digitalocean/0080FF" alt="">DigitalOcean</span>
+            <span class="proj-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/linux/linux-original.svg" alt="">Linux</span>
+            <span class="proj-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/java/java-original.svg" alt="">Java</span>
+            <span class="proj-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/gradle/gradle-original.svg" alt="">Gradle</span>
+          </div>
+          <div class="proj-links">
+            <a href="../blog/devops-project-1.html" class="proj-link"><i class="fa-solid fa-book-open"></i> Blog Post</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="proj-card reveal" data-topic="linux">
+        <div class="proj-thumb">
+          <div class="thumb-icons">
+            <img src="https://cdn.simpleicons.org/sonatype/aaaaaa" alt="Nexus" loading="lazy">
+            <img src="https://cdn.simpleicons.org/apachemaven/C71A36" alt="Maven" loading="lazy">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/gradle/gradle-original.svg" alt="Gradle" loading="lazy">
+            <img src="https://cdn.simpleicons.org/digitalocean/0080FF" alt="DigitalOcean" loading="lazy">
+          </div>
+        </div>
+        <div class="proj-body">
+          <div class="card-top">
+            <span class="card-topic-pill"><i class="fa-solid fa-server"></i> Linux &amp; Servers</span>
+          </div>
+          <div class="proj-name">Deploy Nexus Repository Manager for Centralized Artifact Management</div>
+          <div class="proj-desc">Deployed Nexus on DigitalOcean as a private artifact store with RBAC, cleanup policies, and Maven/Gradle integration for automated publishing.</div>
+          <div class="proj-tag-row">
+            <span class="proj-tag"><img src="https://cdn.simpleicons.org/sonatype/aaaaaa" alt="">Nexus</span>
+            <span class="proj-tag"><img src="https://cdn.simpleicons.org/digitalocean/0080FF" alt="">DigitalOcean</span>
+            <span class="proj-tag"><img src="https://cdn.simpleicons.org/apachemaven/C71A36" alt="">Maven</span>
+            <span class="proj-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/gradle/gradle-original.svg" alt="">Gradle</span>
+          </div>
+          <div class="proj-links">
+            <a href="../blog/devops-project-2.html" class="proj-link"><i class="fa-solid fa-book-open"></i> Blog Post</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="proj-card reveal" data-topic="containers">
+        <div class="proj-thumb">
+          <div class="thumb-icons">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/docker/docker-original.svg" alt="Docker" loading="lazy">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/amazonwebservices/amazonwebservices-plain-wordmark.svg" alt="AWS ECR" loading="lazy">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nodejs/nodejs-plain-wordmark.svg" alt="Node.js" loading="lazy">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/mongodb/mongodb-original.svg" alt="MongoDB" loading="lazy">
+          </div>
+        </div>
+        <div class="proj-body">
+          <div class="card-top">
+            <span class="card-topic-pill"><i class="fa-brands fa-docker"></i> Containers</span>
+          </div>
+          <div class="proj-name">Deploy Multi-Container Application with Docker and AWS ECR</div>
+          <div class="proj-desc">Containerized a Node.js + MongoDB app with Docker Compose, pushed versioned images to AWS ECR, and simulated a remote deployment by pulling the image from the registry.</div>
+          <div class="proj-tag-row">
+            <span class="proj-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/docker/docker-original.svg" alt="">Docker</span>
+            <span class="proj-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/amazonwebservices/amazonwebservices-plain-wordmark.svg" alt="">AWS ECR</span>
+            <span class="proj-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/mongodb/mongodb-original.svg" alt="">MongoDB</span>
+          </div>
+          <div class="proj-links">
+            <a href="../blog/devops-project-3.html" class="proj-link"><i class="fa-solid fa-book-open"></i> Blog Post</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="proj-card reveal" data-topic="cicd">
+        <div class="proj-thumb">
+          <div class="thumb-icons">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/jenkins/jenkins-original.svg" alt="Jenkins" loading="lazy">
+            <img src="https://cdn.simpleicons.org/apachegroovy/4298B8" alt="Groovy" loading="lazy">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/git/git-original.svg" alt="Git" loading="lazy">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/docker/docker-original.svg" alt="Docker" loading="lazy">
+          </div>
+        </div>
+        <div class="proj-body">
+          <div class="card-top">
+            <span class="card-topic-pill"><i class="fa-solid fa-code-branch"></i> CI/CD with Jenkins</span>
+          </div>
+          <div class="proj-name">Build Reusable Jenkins Shared Library</div>
+          <div class="proj-desc">Built a centralized Jenkins Shared Library of reusable Groovy functions — eliminating pipeline duplication across microservices.</div>
+          <div class="proj-tag-row">
+            <span class="proj-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/jenkins/jenkins-original.svg" alt="">Jenkins</span>
+            <span class="proj-tag"><img src="https://cdn.simpleicons.org/apachegroovy/4298B8" alt="">Groovy</span>
+            <span class="proj-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/docker/docker-original.svg" alt="">Docker</span>
+            <span class="proj-tag"><img src="https://cdn.simpleicons.org/apachemaven/C71A36" alt="">Maven</span>
+          </div>
+          <div class="proj-links">
+            <a href="../blog/devops-project-4.html" class="proj-link"><i class="fa-solid fa-book-open"></i> Blog Post</a>
+            <a href="https://gitlab.com/nvastola/jenkins-shared-library" target="_blank" class="proj-link"><i class="fa-brands fa-gitlab"></i> GitLab</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="proj-card reveal" data-topic="cicd">
+        <div class="proj-thumb">
+          <div class="thumb-icons">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/jenkins/jenkins-original.svg" alt="Jenkins" loading="lazy">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/docker/docker-original.svg" alt="Docker" loading="lazy">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/amazonwebservices/amazonwebservices-plain-wordmark.svg" alt="AWS EC2" loading="lazy">
+            <img src="https://cdn.simpleicons.org/apachemaven/C71A36" alt="Maven" loading="lazy">
+          </div>
+        </div>
+        <div class="proj-body">
+          <div class="card-top">
+            <span class="card-topic-pill"><i class="fa-solid fa-code-branch"></i> CI/CD with Jenkins</span>
+          </div>
+          <div class="proj-name">Deploying to EC2: From Git Commit to Production with Docker Compose</div>
+          <div class="proj-desc">Full commit-to-production pipeline with dynamic semantic versioning, automated Docker image builds, and remote SSH deployments via Jenkins and Docker Compose.</div>
+          <div class="proj-tag-row">
+            <span class="proj-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/jenkins/jenkins-original.svg" alt="">Jenkins</span>
+            <span class="proj-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/docker/docker-original.svg" alt="">Docker</span>
+            <span class="proj-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/amazonwebservices/amazonwebservices-plain-wordmark.svg" alt="">AWS EC2</span>
+            <span class="proj-tag"><img src="https://cdn.simpleicons.org/apachemaven/C71A36" alt="">Maven</span>
+          </div>
+          <div class="proj-links">
+            <a href="../blog/devops-project-5.html" class="proj-link"><i class="fa-solid fa-book-open"></i> Blog Post</a>
+            <a href="https://gitlab.com/nvastola/java-maven-app-aws/-/blob/jenkins-jobs/README.md" target="_blank" class="proj-link"><i class="fa-brands fa-gitlab"></i> GitLab</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="proj-card reveal" data-topic="kubernetes">
+        <div class="proj-thumb">
+          <div class="thumb-icons">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/kubernetes/kubernetes-original.svg" alt="Kubernetes" loading="lazy">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/redis/redis-original.svg" alt="Redis" loading="lazy">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/linux/linux-original.svg" alt="Linux" loading="lazy">
+          </div>
+        </div>
+        <div class="proj-body">
+          <div class="card-top">
+            <span class="card-topic-pill"><i class="fa-solid fa-dharmachakra"></i> Kubernetes</span>
+          </div>
+          <div class="proj-name">Deploy Production Microservices on Kubernetes</div>
+          <div class="proj-desc">Deployed Google's 11-service Online Boutique on a live Linode LKE cluster with resource limits, liveness/readiness probes, and LoadBalancer config.</div>
+          <div class="proj-tag-row">
+            <span class="proj-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/kubernetes/kubernetes-original.svg" alt="">Kubernetes</span>
+            <span class="proj-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/redis/redis-original.svg" alt="">Redis</span>
+            <span class="proj-tag">Linode LKE</span>
+            <span class="proj-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/linux/linux-original.svg" alt="">Linux</span>
+          </div>
+          <div class="proj-links">
+            <a href="../blog/devops-project-6.html" class="proj-link"><i class="fa-solid fa-book-open"></i> Blog Post</a>
+            <a href="https://gitlab.com/nvastola/k8s-microservices-demo" target="_blank" class="proj-link"><i class="fa-brands fa-gitlab"></i> GitLab</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="proj-card reveal" data-topic="cicd">
+        <div class="proj-thumb">
+          <div class="thumb-icons">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/jenkins/jenkins-original.svg" alt="Jenkins" loading="lazy">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/kubernetes/kubernetes-original.svg" alt="Kubernetes" loading="lazy">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/amazonwebservices/amazonwebservices-plain-wordmark.svg" alt="AWS" loading="lazy">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/docker/docker-original.svg" alt="Docker" loading="lazy">
+          </div>
+        </div>
+        <div class="proj-body">
+          <div class="card-top">
+            <span class="card-topic-pill"><i class="fa-solid fa-code-branch"></i> CI/CD with Jenkins</span>
+          </div>
+          <div class="proj-name">Deploying to Kubernetes: A Complete Jenkins, ECR, and EKS Pipeline</div>
+          <div class="proj-desc">Building an end-to-end CI/CD pipeline deploying to AWS EKS. Features dynamic envsubst manifests, AWS ECR integration, and automated Docker image builds via Jenkins.</div>
+          <div class="proj-tag-row">
+            <span class="proj-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/jenkins/jenkins-original.svg" alt="">Jenkins</span>
+            <span class="proj-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/amazonwebservices/amazonwebservices-plain-wordmark.svg" alt="">AWS EKS</span>
+            <span class="proj-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/amazonwebservices/amazonwebservices-plain-wordmark.svg" alt="">AWS ECR</span>
+            <span class="proj-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/kubernetes/kubernetes-original.svg" alt="">Kubernetes</span>
+            <span class="proj-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/docker/docker-original.svg" alt="">Docker</span>
+          </div>
+          <div class="proj-links">
+            <a href="../blog/devops-project-7.html" class="proj-link"><i class="fa-solid fa-book-open"></i> Blog Post</a>
+            <a href="https://gitlab.com/nvastola/java-maven-app-eks/-/blob/jenkins-jobs/README.md?ref_type=heads" target="_blank" class="proj-link"><i class="fa-brands fa-gitlab"></i> GitLab</a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="proj-card reveal" data-topic="iac">
+        <div class="proj-thumb">
+          <div class="thumb-icons">
+            <img src="https://cdn.simpleicons.org/terraform/7B42BC" alt="Terraform" loading="lazy">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/jenkins/jenkins-original.svg" alt="Jenkins" loading="lazy">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/amazonwebservices/amazonwebservices-plain-wordmark.svg" alt="AWS" loading="lazy">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/docker/docker-original.svg" alt="Docker" loading="lazy">
+          </div>
+        </div>
+        <div class="proj-body">
+          <div class="card-top">
+            <span class="card-topic-pill"><i class="fa-solid fa-layer-group"></i> IaC</span>
+          </div>
+          <div class="proj-name">Automating EC2 Provisioning in a Jenkins CI/CD Pipeline with Terraform</div>
+          <div class="proj-desc">Replacing manual EC2 deployment with Infrastructure as Code. Automating Jenkins pipelines with Terraform, dynamic IP retrieval, and solving initialization timing.</div>
+          <div class="proj-tag-row">
+            <span class="proj-tag"><img src="https://cdn.simpleicons.org/terraform/7B42BC" alt="">Terraform</span>
+            <span class="proj-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/jenkins/jenkins-original.svg" alt="">Jenkins</span>
+            <span class="proj-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/amazonwebservices/amazonwebservices-plain-wordmark.svg" alt="">AWS EC2</span>
+            <span class="proj-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/docker/docker-original.svg" alt="">Docker</span>
+          </div>
+          <div class="proj-links">
+            <a href="../blog/devops-project-8.html" class="proj-link"><i class="fa-solid fa-book-open"></i> Blog Post</a>
+            <a href="https://gitlab.com/nvastola/java-maven-app-tf/-/blob/feature/starting-code/README.md?ref_type=heads" target="_blank" class="proj-link"><i class="fa-brands fa-gitlab"></i> GitLab</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="proj-card reveal" data-topic="automation">
+        <div class="proj-thumb">
+          <div class="thumb-icons">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/python/python-original.svg" alt="Python" loading="lazy">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/linux/linux-original.svg" alt="Linux" loading="lazy">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/docker/docker-original.svg" alt="Docker" loading="lazy">
+          </div>
+        </div>
+        <div class="proj-body">
+          <div class="card-top">
+            <span class="card-topic-pill"><i class="fa-brands fa-python"></i> Automation</span>
+          </div>
+          <div class="proj-name">Automating Website Monitoring with Python</div>
+          <div class="proj-desc">Built a Python script to monitor web apps, send SMTP email alerts, and self-heal containers automatically via SSH and the Linode API.</div>
+          <div class="proj-tag-row">
+            <span class="proj-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/python/python-original.svg" alt="">Python</span>
+            <span class="proj-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/linux/linux-original.svg" alt="">Linux</span>
+            <span class="proj-tag">Linode</span>
+            <span class="proj-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/docker/docker-original.svg" alt="">Docker</span>
+          </div>
+          <div class="proj-links">
+            <a href="../blog/devops-project-9.html" class="proj-link"><i class="fa-solid fa-book-open"></i> Blog Post</a>
+            <a href="https://github.com/nvastola/web-monitoring-python" target="_blank" class="proj-link"><i class="fa-brands fa-github"></i> GitHub</a>
+          </div>
+        </div>
+      </div>
+      <div class="proj-card reveal" data-topic="cicd">
+        <div class="proj-thumb">
+          <div class="thumb-icons">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/ansible/ansible-original.svg" alt="Ansible" loading="lazy">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/jenkins/jenkins-original.svg" alt="Jenkins" loading="lazy">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/amazonwebservices/amazonwebservices-plain-wordmark.svg" alt="AWS" loading="lazy">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/linux/linux-original.svg" alt="Linux" loading="lazy">
+          </div>
+        </div>
+        <div class="proj-body">
+          <div class="card-top">
+            <span class="card-topic-pill"><i class="fa-solid fa-code-branch"></i> CI/CD with Jenkins</span>
+          </div>
+          <div class="proj-name">Running Ansible from a Jenkins Pipeline</div>
+          <div class="proj-desc">Integrating Jenkins CI/CD with Ansible for remote server configuration. Automated dynamic inventories, SSH pipelines, and coordinating infrastructure as code.</div>
+          <div class="proj-tag-row">
+            <span class="proj-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/ansible/ansible-original.svg" alt="">Ansible</span>
+            <span class="proj-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/jenkins/jenkins-original.svg" alt="">Jenkins</span>
+            <span class="proj-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/amazonwebservices/amazonwebservices-plain-wordmark.svg" alt="">AWS EC2</span>
+            <span class="proj-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/linux/linux-original.svg" alt="">Linux</span>
+          </div>
+          <div class="proj-links">
+            <a href="../blog/devops-project-10.html" class="proj-link"><i class="fa-solid fa-book-open"></i> Blog Post</a>
+            <a href="https://gitlab.com/nvastola/ansible-integration-jenkins" target="_blank" class="proj-link"><i class="fa-brands fa-gitlab"></i> GitLab</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div style="text-align:center;margin-top:4rem" class="reveal">
+      <a href="../index.html#projects" class="btn-outline"><i class="fa-solid fa-arrow-left"></i> Back to Home</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-line"></div>
+  <div class="footer-grid">
+    <div class="footer-col">
+      <h1>Noah Vastola</h1>
+      <p>Systems administrator focused on enterprise endpoint management, identity, and infrastructure automation.</p>
+    </div>
+    <div class="footer-col">
+      <div class="f-col-title">Quick Links</div>
+      <ul>
+        <li><a href="../index.html#about">About</a></li>
+        <li><a href="../index.html#skills">Skills</a></li>
+        <li><a href="../index.html#projects">Projects</a></li>
+        <li><a href="../index.html#blogs">Blogs</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <div class="f-col-title">Credentials</div>
+      <ul>
+        <li><a href="../index.html#certifications">CompTIA Security+</a></li>
+        <li><a href="../index.html#certifications">CompTIA Network+</a></li>
+        <li><a href="../index.html#certifications">AWS Cloud Practitioner</a></li>
+        <li><a href="../index.html#certifications">B.S. ISA &ndash; LSU</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <div class="f-col-title">Connect</div>
+      <div class="f-socials">
+        <a href="https://gitlab.com/nvastola" target="_blank" class="f-social" title="GitLab"><i class="fa-brands fa-gitlab"></i></a>
+        <a href="https://www.linkedin.com/in/noahvastola/" target="_blank" class="f-social" title="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
+        <a href="mailto:noahvastola@gmail.com" class="f-social" title="Email"><i class="fa-solid fa-envelope"></i></a>
+        <a href="../blog.html" class="f-social" title="Blog"><i class="fa-solid fa-pen-nib"></i></a>
+      </div>
+      <p class="f-keywords">Keywords: Systems &amp; Infrastructure Projects, Endpoint Management, Active Directory, Automation, PowerShell, Ansible, Terraform, Kubernetes, CI/CD, Baton Rouge</p>
+    </div>
+  </div>
+</footer>
+
+<script src="../js/scripts.js"></script>
+
+</body>
+</html>
