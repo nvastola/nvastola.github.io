@@ -44,11 +44,15 @@ if(hamburger && mobMenu) {
 
 // Custom Cursor
 const dot = document.getElementById('cursorDot');
-if(dot) {
+if(dot && window.matchMedia('(pointer: fine)').matches) {
   document.addEventListener('mousemove', e => {
     dot.style.left = e.clientX + 'px';
     dot.style.top = e.clientY + 'px';
+    dot.classList.add('on'); // stays hidden until the pointer has actually moved
   });
+  document.addEventListener('mouseleave', () => dot.classList.remove('on'));
+} else if(dot) {
+  dot.remove(); // touch device: no pointer to follow
 }
 
 // Experience Timeline
@@ -206,9 +210,11 @@ async function updateVisitorCount() {
         console.log('Visitor count updated:', data.count);
         
     } catch (error) {
+        // The counter is a nice-to-have. If the API is unreachable, remove the chip
+        // entirely rather than showing an error where a visitor expects a number.
         console.error('Error fetching visitor count:', error);
-        // Display error message to user
-        counterElement.textContent = 'Error loading count';
+        const chip = counterElement.closest('.visitor-chip');
+        if (chip) chip.remove(); else counterElement.textContent = '\u2014';
     }
 }
 
