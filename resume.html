@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Resume | Noah Vastola &ndash; Systems &amp; Infrastructure Engineering</title>
+<meta name="description" content="Full resume for Noah Vastola: systems administration and infrastructure engineering experience, certifications, education, and a complete technical skills breakdown."/>
+<meta name="author" content="Noah Vastola"/>
+
+<meta property="og:type" content="profile"/>
+<meta property="og:site_name" content="Noah Vastola"/>
+<meta property="og:url" content="https://nvastola.com/resume.html"/>
+<meta property="og:title" content="Resume | Noah Vastola"/>
+<meta property="og:description" content="Systems administration and infrastructure engineering &mdash; full experience record, certifications, and technical skills by domain."/>
+<meta name="twitter:card" content="summary"/>
+
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+
+<link rel="icon" href="assets/img/favicon.ico" sizes="any"/>
+<link rel="stylesheet" href="styles.css"/>
+
+<style>
+  /* ---- Resume document layout ---- */
+  .resume-hero { padding-top: 140px; padding-bottom: 2rem; text-align: center; }
+  .resume-contact { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.75rem 1.5rem; margin: 1.5rem 0 2rem; }
+  .resume-contact a, .resume-contact span { display: inline-flex; align-items: center; gap: 0.45rem; font-family: var(--mono-font); font-size: 0.8rem; color: var(--muted-fg); transition: color 0.2s; }
+  .resume-contact a:hover { color: var(--primary); }
+  .resume-contact i { color: var(--fg); font-size: 0.85rem; }
+
+  .resume-doc { max-width: 900px; margin: 0 auto; padding: 0 2rem 5rem; }
+  .r-section { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 2.5rem 3rem; margin-bottom: 1.5rem; text-align: left; }
+  @media(max-width: 768px) { .r-section { padding: 1.75rem 1.5rem; } }
+
+  .r-section-title { display: flex; align-items: center; gap: 0.75rem; font-family: var(--mono-font); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--primary); margin-bottom: 2rem; }
+  .r-section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  /* Entry header: role left, dates right, wrapping cleanly on narrow screens */
+  .r-entry + .r-entry { margin-top: 2.5rem; padding-top: 2.5rem; border-top: 1px solid var(--border); }
+  .r-entry-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 0.25rem 1rem; margin-bottom: 0.35rem; }
+  .r-role { font-size: 1.1rem; font-weight: 700; color: var(--fg); letter-spacing: -0.01em; }
+  .r-dates { font-family: var(--mono-font); font-size: 0.8rem; color: var(--muted-fg); white-space: nowrap; }
+  .r-org { font-size: 0.9rem; color: var(--muted-fg); margin-bottom: 0.9rem; }
+  .r-scope { font-size: 0.9rem; color: var(--fg); line-height: 1.7; margin-bottom: 1rem; }
+
+  .r-list { padding-left: 1.25rem; margin-bottom: 1.25rem; }
+  .r-list li { font-size: 0.9rem; color: var(--muted-fg); line-height: 1.75; margin-bottom: 0.6rem; list-style: square; }
+  .r-list li::marker { color: var(--border); }
+  .r-list strong { color: var(--fg); font-weight: 600; }
+
+  .r-stack { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .r-chip { font-family: var(--mono-font); font-size: 0.68rem; font-weight: 500; padding: 0.25rem 0.5rem; border-radius: 4px; background: var(--card); color: var(--fg); border: 1px solid var(--border); text-transform: uppercase; letter-spacing: 0.05em; }
+
+  /* Skills grouped by domain — the breakdown the home page condenses into icons */
+  .r-skill-group + .r-skill-group { margin-top: 1.75rem; }
+  .r-skill-label { font-size: 0.85rem; font-weight: 700; color: var(--fg); margin-bottom: 0.75rem; }
+  .r-skill-label i { color: var(--primary); margin-right: 0.5rem; }
+
+  /* Education / certification cards */
+  .r-cred-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
+  .r-cred { background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 1.25rem; }
+  .r-cred-name { font-size: 0.9rem; font-weight: 700; color: var(--fg); line-height: 1.4; margin-bottom: 0.4rem; }
+  .r-cred-meta { font-family: var(--mono-font); font-size: 0.7rem; color: var(--muted-fg); text-transform: uppercase; letter-spacing: 0.05em; }
+
+  /* Print: drop the site chrome so Ctrl+P produces a clean one-page document */
+  @media print {
+    nav, .mob-menu, footer, .cursor-dot, .resume-actions, .grid-bg::before { display: none !important; }
+    .resume-hero { padding-top: 0; }
+    .r-section { border: none; padding: 0 0 1.5rem; margin-bottom: 0; break-inside: avoid; }
+    .reveal { opacity: 1 !important; transform: none !important; }
+  }
+</style>
+
+<script>
+(function(){
+  var s = localStorage.getItem('nv-theme') || 'dark';
+  if(s === 'dark') document.documentElement.classList.add('dark');
+  else document.documentElement.classList.remove('dark');
+})();
+</script>
+</head>
+<body>
+
+<div class="cursor-dot" id="cursorDot"></div>
+
+<nav id="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="nav-avatar">NV</div>
+      <span>Noah Vastola</span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html#about" class="nav-link"><i class="fa-solid fa-user"></i> About</a>
+      <a href="index.html#skills" class="nav-link"><i class="fa-solid fa-code"></i> Skills</a>
+      <a href="index.html#experience" class="nav-link"><i class="fa-solid fa-briefcase"></i> Experience</a>
+      <a href="index.html#projects" class="nav-link"><i class="fa-solid fa-diagram-project"></i> Projects</a>
+      <a href="resume.html" class="nav-link active"><i class="fa-solid fa-file-lines"></i> Resume</a>
+      <a href="blog.html" class="nav-link"><i class="fa-solid fa-pen-nib"></i> Blogs</a>
+    </div>
+    <div class="nav-right">
+      <button class="theme-btn" id="themeBtn" title="Toggle theme"><i class="fa-solid fa-moon" id="themeIcon"></i></button>
+      <a href="index.html#contact" class="contact-btn" title="Contact me"><i class="fa-solid fa-envelope"></i></a>
+      <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+
+<div class="mob-menu" id="mobMenu">
+  <a href="index.html#about" class="mob-link"><i class="fa-solid fa-user"></i> About</a>
+  <a href="index.html#skills" class="mob-link"><i class="fa-solid fa-code"></i> Skills</a>
+  <a href="index.html#experience" class="mob-link"><i class="fa-solid fa-briefcase"></i> Experience</a>
+  <a href="index.html#projects" class="mob-link"><i class="fa-solid fa-diagram-project"></i> Projects</a>
+  <a href="resume.html" class="mob-link"><i class="fa-solid fa-file-lines"></i> Resume</a>
+  <a href="blog.html" class="mob-link"><i class="fa-solid fa-pen-nib"></i> Blogs</a>
+  <div class="mob-actions">
+    <button class="theme-btn" id="themeBtnMob"><i class="fa-solid fa-moon" id="themeIconMob"></i></button>
+    <a href="index.html#contact" class="contact-btn"><i class="fa-solid fa-envelope"></i></a>
+  </div>
+</div>
+
+<section class="resume-hero grid-bg">
+  <div class="container">
+    <div class="reveal">
+      <div class="hero-role-box" style="margin-bottom: 1.5rem;">
+        <div class="hero-role"><i class="fa-solid fa-file-lines"></i> Resume</div>
+      </div>
+    </div>
+    <div class="reveal" style="transition-delay: 0.1s;">
+      <h1 class="sec-title">Noah Vastola</h1>
+      <p class="sec-sub" style="margin-bottom: 0;">Systems administration and infrastructure engineering &mdash; the full record behind the highlights on the home page.</p>
+    </div>
+
+    <div class="resume-contact reveal" style="transition-delay: 0.2s;">
+      <a href="mailto:noahvastola@gmail.com"><i class="fa-solid fa-envelope"></i> noahvastola@gmail.com</a>
+      <span><i class="fa-solid fa-location-dot"></i> Baton Rouge, Louisiana</span>
+      <a href="https://www.linkedin.com/in/noahvastola/" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> linkedin.com/in/noahvastola</a>
+      <a href="https://gitlab.com/nvastola" target="_blank" rel="noopener"><i class="fa-brands fa-gitlab"></i> gitlab.com/nvastola</a>
+    </div>
+
+    <div class="hero-actions resume-actions reveal" style="justify-content: center; transition-delay: 0.3s;">
+      <a href="assets/doc/Resume.pdf" target="_blank" rel="noopener" class="btn-primary" style="text-decoration:none;">
+        <i class="fa-solid fa-download"></i> Download PDF
+      </a>
+      <a href="project.html" class="btn-outline">
+        <i class="fa-solid fa-diagram-project"></i> Featured Case Study
+      </a>
+    </div>
+  </div>
+</section>
+
+<div class="resume-doc">
+
+  <section class="r-section reveal" style="padding-top:2.5rem;">
+    <div class="r-section-title"><i class="fa-solid fa-graduation-cap"></i> Education &amp; Certifications</div>
+    <div class="r-entry">
+      <div class="r-entry-head">
+        <div class="r-role">B.S. Information Systems &amp; Analytics</div>
+        <div class="r-dates">Expected Dec 2026</div>
+      </div>
+      <div class="r-org">Louisiana State University A&amp;M &bull; Baton Rouge, LA &bull; GPA 3.67</div>
+      <p class="r-scope">E. J. Ourso College of Business. Coursework centers on systems analysis and design, database design, and business process modeling &mdash; the analysis side of the work I already do operationally.</p>
+    </div>
+    <div class="r-cred-grid" style="margin-top: 2rem;">
+      <div class="r-cred">
+        <div class="r-cred-name"><i class="fa-solid fa-shield-halved" style="color:var(--primary);margin-right:.4rem"></i>CompTIA Security+ ce</div>
+        <div class="r-cred-meta">Issued Aug 2025</div>
+      </div>
+      <div class="r-cred">
+        <div class="r-cred-name"><i class="fa-solid fa-network-wired" style="color:var(--primary);margin-right:.4rem"></i>CompTIA Network+ ce</div>
+        <div class="r-cred-meta">Issued Jun 2025</div>
+      </div>
+      <div class="r-cred">
+        <div class="r-cred-name"><i class="fa-brands fa-aws" style="color:var(--primary);margin-right:.4rem"></i>AWS Certified Cloud Practitioner</div>
+        <div class="r-cred-meta">Issued May 2026</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="r-section reveal">
+    <div class="r-section-title"><i class="fa-solid fa-briefcase"></i> Professional Experience</div>
+
+    <div class="r-entry">
+      <div class="r-entry-head">
+        <div class="r-role">System Administrator I (Intern)</div>
+        <div class="r-dates">Jul 2026 &ndash; Present</div>
+      </div>
+      <div class="r-org">Louisiana State University &bull; Baton Rouge, LA</div>
+      <p class="r-scope">Endpoint and application lifecycle management across a university fleet spanning Windows and macOS, working inside an established SCCM and Intune environment.</p>
+      <ul class="r-list">
+        <li>Audited <strong>300 applications</strong> deployed through Microsoft Configuration Manager (SCCM) to identify end-of-life software, then packaged, tested, and deployed approved replacements.</li>
+        <li>Authored <strong>SQL version-detection queries</strong> against the SCCM site database to target device collections running outdated software.</li>
+        <li>Packaged and deployed applications with custom install and uninstall scripts where vendor installers did not meet enterprise requirements.</li>
+        <li>Diagnosed imaging and deployment failures through <strong>CMTrace log analysis</strong> and Sysinternals Process Monitor.</li>
+        <li>Enrolled Windows and macOS devices in Microsoft Intune and Entra ID through PXE boot imaging.</li>
+      </ul>
+      <div class="r-stack">
+        <span class="r-chip">SCCM</span><span class="r-chip">Intune</span><span class="r-chip">Entra ID</span>
+        <span class="r-chip">App Packaging</span><span class="r-chip">SQL</span><span class="r-chip">PowerShell</span><span class="r-chip">PXE Imaging</span>
+      </div>
+    </div>
+
+    <div class="r-entry">
+      <div class="r-entry-head">
+        <div class="r-role">Technology Director (Contract)</div>
+        <div class="r-dates">Dec 2025 &ndash; Present</div>
+      </div>
+      <div class="r-org">Louisiana Association of Public Adjusters (LAPA) &bull; Remote</div>
+      <p class="r-scope">Sole technical resource for a professional association &mdash; web infrastructure, identity, DNS, and member-facing systems &mdash; reporting directly to the board.</p>
+      <ul class="r-list">
+        <li>Own the full technology function as the only technical resource, including vendor evaluation and written recommendations to the board.</li>
+        <li>Established a <strong>staging-first change process</strong> for core, plugin, and theme updates, syncing staging and production databases before each release and maintaining restore points for rollback.</li>
+        <li>Designed a <strong>role-based access control</strong> system mapping membership tiers to distinct permission scopes, and enforced SSL/TLS across all web properties.</li>
+        <li>Evaluated migrating from WordPress to a static Astro site on AWS and recommended remaining on WordPress &mdash; reducing operational overhead and simplifying handoff to future staff.</li>
+        <li>Administered Microsoft 365 identity and DNS across <strong>2 hosting providers</strong>, configuring SPF, DKIM, and MX records, and placed all site configuration under Git version control.</li>
+      </ul>
+      <div class="r-stack">
+        <span class="r-chip">Microsoft 365</span><span class="r-chip">DNS</span><span class="r-chip">SPF/DKIM</span>
+        <span class="r-chip">RBAC</span><span class="r-chip">SSL/TLS</span><span class="r-chip">WordPress</span><span class="r-chip">Git</span>
+      </div>
+    </div>
+
+    <div class="r-entry">
+      <div class="r-entry-head">
+        <div class="r-role">IT Support Technician I (Intern)</div>
+        <div class="r-dates">Jan 2024 &ndash; Jun 2026</div>
+      </div>
+      <div class="r-org">LSU AgCenter &bull; Baton Rouge, LA</div>
+      <p class="r-scope">Front-line and escalation support for a statewide agricultural research institution, covering device deployment, identity, networking, and incident response.</p>
+      <ul class="r-list">
+        <li>Deployed <strong>150 Windows endpoints</strong> in an enterprise PC refresh using Dell Image Assist, completing rollout in 3 months with zero data loss.</li>
+        <li>Remediated <strong>250 systems</strong> during the CrowdStrike BSOD incident, restoring operations within hours.</li>
+        <li>Enforced multi-factor authentication across staff accounts and investigated phishing escalations, applying Zero Trust access principles.</li>
+        <li>Resolved tickets spanning VPN, DNS, DHCP, wireless, and <strong>Active Directory replication failures</strong> through root cause analysis.</li>
+      </ul>
+      <div class="r-stack">
+        <span class="r-chip">Active Directory</span><span class="r-chip">Group Policy</span><span class="r-chip">MFA</span>
+        <span class="r-chip">Zero Trust</span><span class="r-chip">Dell Image Assist</span><span class="r-chip">Incident Response</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="r-section reveal">
+    <div class="r-section-title"><i class="fa-solid fa-diagram-project"></i> Selected Projects</div>
+
+    <div class="r-entry">
+      <div class="r-entry-head">
+        <div class="r-role">CI/CD Pipeline to AWS EKS</div>
+        <div class="r-dates">2026</div>
+      </div>
+      <div class="r-org">Jenkins &bull; Docker &bull; Kubernetes &bull; AWS EKS &bull; AWS ECR &bull; Java &bull; Maven</div>
+      <p class="r-scope">Built an end-to-end pipeline that compiles Java artifacts, pushes Docker images to AWS ECR, and deploys to an EKS cluster through dynamically templated manifests. Written up in full on the <a href="project.html" style="color:var(--primary);text-decoration:underline;text-underline-offset:3px;">case study page</a>.</p>
+    </div>
+
+    <div class="r-entry">
+      <div class="r-entry-head">
+        <div class="r-role">Infrastructure as Code Provisioning Pipeline</div>
+        <div class="r-dates">2026</div>
+      </div>
+      <div class="r-org">Terraform &bull; Ansible &bull; Jenkins &bull; AWS EC2</div>
+      <p class="r-scope">Replaced manual EC2 provisioning with Terraform executed from a Jenkins pipeline, then configured the resulting hosts through Ansible playbooks with a dynamic inventory. Walkthrough in <a href="blog/devops-project-8.html" style="color:var(--primary);text-decoration:underline;text-underline-offset:3px;">the build log</a>.</p>
+    </div>
+  </section>
+
+  <section class="r-section reveal">
+    <div class="r-section-title"><i class="fa-solid fa-code"></i> Technical Skills</div>
+
+    <div class="r-skill-group">
+      <div class="r-skill-label"><i class="fa-solid fa-cloud"></i>Cloud &amp; Infrastructure</div>
+      <div class="r-stack">
+        <span class="r-chip">AWS (EKS, ECR, EC2)</span><span class="r-chip">Azure (Entra ID, Intune)</span><span class="r-chip">Terraform</span>
+        <span class="r-chip">Ansible</span><span class="r-chip">Docker</span><span class="r-chip">Kubernetes</span>
+        <span class="r-chip">VMware</span><span class="r-chip">Linux</span><span class="r-chip">Windows Server</span>
+      </div>
+    </div>
+
+    <div class="r-skill-group">
+      <div class="r-skill-label"><i class="fa-solid fa-terminal"></i>CI/CD, Languages &amp; Tools</div>
+      <div class="r-stack">
+        <span class="r-chip">Jenkins</span><span class="r-chip">Git</span><span class="r-chip">GitLab</span><span class="r-chip">GitHub</span>
+        <span class="r-chip">Maven</span><span class="r-chip">Python</span><span class="r-chip">SQL</span><span class="r-chip">PowerShell</span>
+        <span class="r-chip">Bash</span><span class="r-chip">Java</span><span class="r-chip">Groovy</span><span class="r-chip">AI-assisted development</span>
+      </div>
+    </div>
+
+    <div class="r-skill-group">
+      <div class="r-skill-label"><i class="fa-solid fa-lock"></i>Security &amp; Enterprise Systems</div>
+      <div class="r-stack">
+        <span class="r-chip">Active Directory</span><span class="r-chip">Group Policy</span><span class="r-chip">MFA</span>
+        <span class="r-chip">RBAC</span><span class="r-chip">Zero Trust</span><span class="r-chip">SSL/TLS</span><span class="r-chip">SPF/DKIM</span>
+        <span class="r-chip">SCCM</span><span class="r-chip">Microsoft 365</span><span class="r-chip">DNS</span><span class="r-chip">DHCP</span><span class="r-chip">VPN</span>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  <div class="footer-line"></div>
+  <div class="footer-grid">
+    <div class="footer-col">
+      <div class="f-brand-name">Noah Vastola</div>
+      <p>Systems administrator focused on enterprise endpoint management, identity, and infrastructure automation.</p>
+    </div>
+    <div class="footer-col">
+      <div class="f-col-title">Quick Links</div>
+      <ul>
+        <li><a href="index.html#about">About</a></li>
+        <li><a href="index.html#skills">Skills</a></li>
+        <li><a href="projects/projects.html">Projects</a></li>
+        <li><a href="resume.html">Resume</a></li>
+        <li><a href="project.html">Case Study</a></li>
+        <li><a href="blog.html">Blogs</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <div class="f-col-title">Credentials</div>
+      <ul>
+        <li><a href="index.html#certifications">CompTIA Security+</a></li>
+        <li><a href="index.html#certifications">CompTIA Network+</a></li>
+        <li><a href="index.html#certifications">AWS Cloud Practitioner</a></li>
+        <li><a href="index.html#certifications">B.S. ISA &ndash; LSU</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <div class="f-col-title">Connect</div>
+      <div class="f-socials">
+        <a href="https://gitlab.com/nvastola" target="_blank" rel="noopener" class="f-social" title="GitLab"><i class="fa-brands fa-gitlab"></i></a>
+        <a href="https://www.linkedin.com/in/noahvastola/" target="_blank" rel="noopener" class="f-social" title="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
+        <a href="mailto:noahvastola@gmail.com" class="f-social" title="Email"><i class="fa-solid fa-envelope"></i></a>
+        <a href="assets/doc/Resume.pdf" target="_blank" rel="noopener" class="f-social" title="Resume PDF"><i class="fa-solid fa-file-pdf"></i></a>
+      </div>
+      <p class="f-keywords">Keywords: Systems Administrator, Infrastructure Engineering, Endpoint Management, SCCM, Microsoft Intune, Active Directory, Entra ID, Microsoft 365, PowerShell, Ansible, Terraform, Baton Rouge</p>
+    </div>
+  </div>
+</footer>
+
+<script src="js/scripts.js"></script>
+</body>
+</html>
